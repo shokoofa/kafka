@@ -1,4 +1,4 @@
-**Deploy redis with docker-compose file:**
+**Deploy kakfa with docker-compose file:**
 
 ## Explanation:
 >Note: This repo is just for my  Technical task
