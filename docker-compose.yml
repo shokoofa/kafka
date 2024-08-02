@@ -1,0 +1,42 @@
+---
+services:
+  kafka-1:
+        image: www.yourlocal-repo.com/bitnami/kafka:latest
+        container_name: kafka-1
+        user: "1000"
+        network_mode: host
+        environment:
+         # KRaft settings
+         - KAFKA_CFG_NODE_ID=1
+         - KAFKA_CFG_BROKER_ID=1
+         - KAFKA_CFG_PROCESS_ROLES=controller,broker
+         - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=1@kafka-server:9094
+         - KAFKA_ENABLE_KRAFT=yes
+         - KAFKA_KRAFT_CLUSTER_ID=abcdefghijklmnopqrstuv
+         # Listeners
+         - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9094
+         - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://$kafka-server:9092
+         - ALLOW_PLAINTEXT_LISTENER=yes
+         - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT
+         - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
+         - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=PLAINTEXT
+         # Clustering
+         - KAFKA_CFG_OFFSETS_TOPIC_REPLICATION_FACTOR=1
+         - KAFKA_CFG_TRANSACTION_STATE_LOG_MIN_ISR=2
+        volumes:
+         - /opt/kafka/volumes/data:/bitnami/kafka/data
+         - /etc/localtime:/etc/localtime:z
+  kafka-ui:
+        image: www.yourlocal-repo.com/provectuslabs/kafka-ui:v0.7.2
+        hostname: kafka-ui
+        container_name: kafka-ui
+        cap_add:
+          - NET_ADMIN
+        restart: always
+        network_mode: host
+        environment:
+            DYNAMIC_CONFIG_ENABLED: "true"
+            KAFKA_CLUSTERS_0_NAME: "local"
+            KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: "PLAINTEXT://kafka-server:9092"
+        volumes:
+          - /etc/localtime:/etc/localtime:z
