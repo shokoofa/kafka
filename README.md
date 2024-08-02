@@ -19,5 +19,5 @@ The code used here is available on GitHub repo.
 
 `https://github.com/shokoofa/kafka.git`
 
-#### For deploying kafka, just edit the repository address and run the bellow command in the following directory
+#### For deploying kafka, just change the repository address and kafka-server with your appropriate value then run the bellow command in the following directory
 ```docker-compose up -d```
